@@ -22,5 +22,7 @@ type Query {
 
 type Mutation {
     addMovieHandler(movieInput:MovieInput): Movie
+    updateMovieHandler(id:ID!, movieInput:MovieInput): Movie
+    deleteMovieHandler(id:ID!): Boolean
 }
 

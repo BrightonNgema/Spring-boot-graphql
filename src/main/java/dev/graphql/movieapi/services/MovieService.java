@@ -1,5 +1,6 @@
 package dev.graphql.movieapi.services;
 
+import dev.graphql.movieapi.exception.MovieNotFoundException;
 import dev.graphql.movieapi.models.Movie;
 import dev.graphql.movieapi.models.MovieInput;
 import dev.graphql.movieapi.repositories.MovieRepository;
@@ -25,5 +26,22 @@ public class MovieService {
     public Movie addMovie(MovieInput movieInput){
         Movie movie = new Movie(movieInput.title(), movieInput.director(), movieInput.studio(), movieInput.releaseYear(), movieInput.movieCast());
         return movieRepository.save(movie);
+    }
+
+    public Movie updateMovie(Integer id, MovieInput movieInput){
+        Movie movie = movieRepository.findById(id).orElseThrow(() -> new MovieNotFoundException("Movie with given ID does not exist"));
+
+        movie.setTitle(movieInput.title());
+        movie.setDirector(movieInput.director());
+        movie.setStudio(movieInput.studio());
+        movie.setReleaseYear(movieInput.releaseYear());
+        movie.setMovieCast(movieInput.movieCast());
+        return movieRepository.save(movie);
+    }
+
+    public boolean deleteMovie(Integer id){
+        Movie movie = movieRepository.findById(id).orElseThrow(() -> new MovieNotFoundException("Movie with given ID does not exist"));
+       this.movieRepository.deleteById(movie.getId());
+       return true;
     }
 }
